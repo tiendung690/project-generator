@@ -23,13 +23,13 @@ public class ${entity}QO extends SuperQO {
 
     private static final long serialVersionUID = 1L;
 
-## ----------  BEGIN 字段循环遍历  ----------
+## ----------  BEGIN  ----------
 	#foreach($field in ${table.fields})
 		#if(!${field.keyFlag})
 		private ${field.propertyType} ${field.propertyName};
 		#end
 	#end
-## ----------  END 字段循环遍历  ----------
+## ----------  END----------
 
 	#if(!${entityLombokModel})
 		#foreach($field in ${table.fields})

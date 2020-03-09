@@ -9,7 +9,7 @@ import ${cfg.packagePojo}.${entity}VO;
 import java.util.List;
 /**
  * <p>
- * VO
+ *
  * </p>
  *
  * @author ${author}

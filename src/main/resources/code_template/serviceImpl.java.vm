@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.List;
 /**
  * <p>
- * $!{table.comment} 服务实现类
+ * $!{table.comment}
  * </p>
  *
  * @author ${author}

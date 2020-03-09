@@ -22,11 +22,11 @@ public class ${entity}VO extends SuperVO {
 
     private static final long serialVersionUID = 1L;
 
-## ----------  BEGIN 字段循环遍历  ----------
+## ----------  BEGIN  ----------
 #foreach($field in ${table.fields})
 	private ${field.propertyType} ${field.propertyName};
 #end
-## ----------  END 字段循环遍历  ----------
+## ----------  END  ----------
 
 #if(!${entityLombokModel})
 #foreach($field in ${table.fields})
