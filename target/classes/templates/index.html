@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head >
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+  <title>Project Auto Generator</title>
+  <!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="/css/dashboard.css" rel="stylesheet">
+</head>
+
+  <body>
+  <nav  class="navbar navbar-inverse navbar-fixed-top" th:include="base :: #navbarContainer">
+  </nav>
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="/list">生成模块列表 <span class="sr-only">(current)</span></a></li>
+            <li><a href="/create">创建模块生成</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h2 class="sub-header">模块列表</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>模块名称</th>
+                  <th>相关表</th>
+                  <th>Namespace</th>
+                  <th>覆盖</th>
+                  <th>作者</th>
+                  <th>模块包名</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="tbody">
+                <tr th:each="moduleVo:${moduleList}">
+                  <td class="hide" th:text="${moduleVo.id}"></td>
+                  <td th:text="${moduleVo.tbModule}"></td>
+                  <td th:text="${moduleVo.tbNames}"></td>
+                  <td th:text="${moduleVo.tbPrefix}"></td>
+                  <td th:text="${moduleVo.fileOverride==1?'是':'否'}"></td>
+                  <td th:text="${moduleVo.author}"></td>
+                  <td th:text="${moduleVo.tbPackage}"></td>
+                  <td>
+                    <button class="btn btn-primary btn-small edit" data-toggle="modal" data-target="#myModal">编辑</button>
+                    <button class="btn btn-success btn-small generate">生成代码</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js"></script>
+
+  <!-- 模态框（Modal） -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">模块编辑</h4>
+        </div>
+        <div class="modal-body">
+          <form role="form-horizontal">
+            <div class="form-group">
+              <label for=""  class="col-sm-3 control-label">模块名称 <span class="text-danger">*</span></label>
+              <div class="col-sm-9">
+               <input type="text" class="form-control" id="tbModule" placeholder="">
+              </div>
+              <div class="col-sm-offset-3 col-sm-9">
+              <div class="alert alert-info">如模块名称，系统模块(sys)</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for=""  class="col-sm-3 control-label">相关表 <span class="text-danger">*</span></label>
+              <div class="col-sm-9">
+              <input type="text" class="form-control" id="tbNames" placeholder="">
+              </div>
+              <div class="col-sm-offset-3 col-sm-9">
+                <div class="alert alert-info"> 相关表，多个请用逗号[,]隔开。</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for=""  class="col-sm-3 control-label">Namespace <span class="text-danger">*</span></label>
+              <div class="col-sm-9">
+              <input type="text" class="form-control" id="tbPrefix" placeholder="">
+              </div>
+              <div class="col-sm-offset-3 col-sm-9">
+              <div class="alert alert-info"> Namespace, 输入则会排除相关前缀生成表，如不输入则按照整个数据库表一起生成。</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for=""  class="col-sm-3 control-label">覆盖之前文件 <span class="text-danger">*</span></label>
+              <div class="col-sm-9">
+                <label class="radio-inline">
+                  <input type="radio" name="fileOverride" value="1" checked> 是
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="fileOverride" value="0"> 否
+                </label>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+              <label for=""  class="col-sm-3 control-label">作者 <span class="text-danger">*</span></label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="author" placeholder="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for=""  class="col-sm-3 control-label">模块包名 <span class="text-danger">*</span></label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="tbPackage" placeholder="">
+              </div>
+              <div class="col-sm-offset-3 col-sm-9">
+                <div class="alert alert-info">
+                  生成模块的基本路径如 com.domain.project.sys
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" id="sub">提交更改</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+
+  <script>
+      $(function(){
+          $('#tbody > tr').click(function () {
+              var id = $(this).find('td').eq(0).text();
+              $.ajax({
+                  type:"GET",
+                  url:"http://localhost:8000/service/generate/module/"+id,
+                  contentType:"application/json",
+                  success: function(data){
+                      $('#tbModule').val(data.tbModule);
+                      $('#tbNames').val(data.tbNames);
+                      $('#tbPrefix').val(data.tbPrefix);
+                      $('#fileOverride').val(data.fileOverride);
+                      $('#author').val(data.author);
+                      $('#tbPackage').val(data.tbPackage);
+                  }
+              })
+
+              $('#sub').click(function(){
+                  var tbModule = $.trim($("#tbModule").val());
+                  var tbNames =  $.trim($("#tbNames").val());
+                  var tbPrefix =  $.trim($("#tbPrefix").val());
+                  var author =  $.trim($("#author").val());
+                  var tbPackage =  $.trim($("#tbPackage").val());
+
+                  var formdata = JSON.stringify({
+                      tbModule:tbModule,
+                      tbNames:tbNames,
+                      tbPrefix:tbPrefix,
+                      fileOverride:$('input:radio[name="fileOverride"]:checked').val(),
+                      author:author,
+                      tbPackage:tbPackage
+                  });
+                  if(tbModule == ""){
+                      alert('模块名称不能为空');
+                      $("#tbModule").focus();
+                  }else if(tbNames == ""){
+                      alert('相关表不能为空');
+                      $("#tbNames").focus();
+                  }else if(tbPrefix == ""){
+                      alert('模块Prefix不能为空');
+                      $("#tbPrefix").focus();
+                  }else if(author == ""){
+                      alert('作者不能为空');
+                      $("#author").focus();
+                  }else if(tbPackage == ""){
+                      alert('模块包名不能为空');
+                      $("#tbPackage").focus();
+                  }else{
+                      $.ajax({
+                          type: "PUT",
+                          url: "http://localhost:8000/service/generate/module/update/"+id,
+                          data:formdata,
+                          contentType:"application/json",
+                          success: function(data){
+                              $('#myModal').modal('hide')
+                              window.location.reload();
+                              alert('更新成功');
+                          }
+                      });
+                  }
+                  return false;
+              });
+
+          });
+
+
+          $('#tbody > tr > td:last-child > button.generate').click(function () {
+              if(confirm("确定要生成代码吗？")){
+                  var generateid =  $(this).parent().siblings('.hide').text();
+                  $.ajax({
+                      type:"POST",
+                      url:"http://localhost:8000/service/generate/module/"+generateid+"/execute",
+                      contentType:"application/json",
+                      success: function(data){
+                          alert('代码生成成功');
+                      }
+                  })
+              }
+
+          })
+
+
+      });
+  </script>
+
+</body></html>

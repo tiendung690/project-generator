@@ -1,0 +1,124 @@
+package ${package.Controller};
+
+import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.plugins.Page;
+import ${package.Service}.${table.serviceName};
+import ${cfg.packagePojo}.${entity}QO;
+import ${cfg.packagePojo}.${entity}VO;
+import ${cfg.packagePojo}.${entity}DTO;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import com.domain.project.common.rest.RestResponse;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@RestController
+@RequestMapping("/service#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+    private static Log log = LogFactory.getLog(${table.controllerName}.class);
+
+    @Autowired
+    private ${table.serviceName}  baseService;
+
+    @GetMapping("/list")
+    public RestResponse getVOList(${entity}QO qo) {
+        RestResponse restResponse = new RestResponse();
+        try {
+            List<${entity}VO> data = baseService.getVOList(qo);
+            restResponse.success("", data);
+        } catch (Exception e) {
+            restResponse.failed(e);
+            log.error(e, e);
+        }
+        return restResponse;
+    }
+
+    @GetMapping("/page")
+    public RestResponse getVOPage(${entity}QO qo) {
+        RestResponse restResponse = new RestResponse();
+        try {
+            Page<${entity}VO> data = baseService.getVOPage(qo);
+        restResponse.success("", data);
+        } catch (Exception e) {
+        restResponse.failed(e);
+        log.error(e, e);
+        }
+        return restResponse;
+    }
+
+    @GetMapping("/{id}")
+    public RestResponse getById(@PathVariable Long id) {
+        RestResponse restResponse = new RestResponse();
+        try {
+            ${entity}VO data = baseService.getVOById(id);
+        restResponse.success("", data);
+        } catch (Exception e) {
+        restResponse.failed(e);
+        log.error(e, e);
+        }
+        return restResponse;
+    }
+
+    @PostMapping("/create")
+    public RestResponse create(@RequestBody ${entity}DTO dto) {
+        RestResponse restResponse = new RestResponse();
+        try {
+            baseService.create(dto);
+        } catch (Exception e) {
+        restResponse.failed(e);
+        log.error(e, e);
+        }
+        return restResponse;
+    }
+
+
+    @PutMapping("/update/{id}")
+    public RestResponse update(@PathVariable Long id, @RequestBody ${entity}DTO dto) {
+        RestResponse restResponse = new RestResponse();
+        try {
+            baseService.update(id, dto);
+        } catch (Exception e) {
+        restResponse.failed(e);
+        log.error(e, e);
+        }
+        return restResponse;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public RestResponse delete(@PathVariable Long id) {
+        RestResponse restResponse = new RestResponse();
+        try {
+            baseService.deleteById(id);
+        } catch (Exception e) {
+        restResponse.failed(e);
+        log.error(e, e);
+        }
+        return restResponse;
+    }
+
+}
+
+#end

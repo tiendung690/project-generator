@@ -1,0 +1,27 @@
+package ${package.Mapper};
+
+import com.baomidou.mybatisplus.plugins.Page;
+
+import ${superMapperClassPackage};
+import ${package.Entity}.${entity};
+import ${cfg.packagePojo}.${entity}QO;
+import ${cfg.packagePojo}.${entity}VO;
+import java.util.List;
+/**
+ * <p>
+ * VO
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${kotlin})
+interface ${table.mapperName} : ${superMapperClass}<${entity}>
+#else
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+
+        ${entity}VO getVOById(Long id);
+        List<${entity}VO> getVOList(${entity}QO qo);
+        Page<${entity}VO> getVOList(Page page, ${entity}QO qo);
+}
+#end

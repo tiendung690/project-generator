@@ -1,0 +1,30 @@
+package ${package.Service};
+
+import com.baomidou.mybatisplus.plugins.Page;
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
+import ${cfg.packagePojo}.${entity}VO;
+import ${cfg.packagePojo}.${entity}DTO;
+import ${cfg.packagePojo}.${entity}QO;
+import java.util.List;
+/**
+ * <p>
+ * VO
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${kotlin})
+interface ${table.serviceName} : ${superServiceClass}<${entity}>
+#else
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+
+        ${entity}VO getVOById(Long id);
+        List<${entity}VO> getVOList(${entity}QO qo);
+        Page<${entity}VO> getVOPage(${entity}QO qo);
+        ${entity} create(${entity}DTO dto);
+        ${entity} update(Long id, ${entity}DTO dto);
+        void delete(Long id);
+}
+#end

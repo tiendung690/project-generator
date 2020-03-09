@@ -1,0 +1,32 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: project-generate
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3307/sakila
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456?a
+    continue-on-error: true
+  thymeleaf:
+    mode: LEGACYHTML5
+    prefix: classpath:/templates/
+
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  typeAliasesPackage: com.domain.project
+  global-config:
+    id-type: 2
+    field-strategy: 2
+    db-column-underline: true
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    jdbc-type-for-null: 'null'

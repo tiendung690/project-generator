@@ -1,0 +1,84 @@
+package ${package.ServiceImpl};
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+import ${cfg.packagePojo}.${entity}VO;
+import ${cfg.packagePojo}.${entity}DTO;
+import ${cfg.packagePojo}.${entity}QO;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import ma.glasnost.orika.MapperFacade;
+import org.springframework.beans.factory.annotation.Autowired;
+import ${cfg.superEntity};
+import java.util.stream.Collectors;
+import java.util.List;
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+
+        private static Log log = LogFactory.getLog(${table.serviceImplName}.class);
+
+        @Autowired
+        private MapperFacade mapper;
+
+        @Override
+        public ${entity}VO getVOById(Long id) {
+            ${entity} obj = selectById(id);
+            return convertToVO(obj);
+        }
+        @Override
+        public List<${entity}VO> getVOList(${entity}QO qo) {
+            return baseMapper.getVOList(qo);
+        }
+        @Override
+        public Page<${entity}VO> getVOPage(${entity}QO qo) {
+            Page<${entity}VO> pages = qo.getPage();
+            pages.setRecords(baseMapper.getVOList(pages, qo));
+            return pages;
+        }
+
+        @Override
+        public ${entity} create(${entity}DTO dto) {
+            ${entity} obj = mapper.map(dto, ${entity}.class);
+            insert(obj);
+            return obj;
+        }
+
+        @Override
+        public ${entity} update(Long id, ${entity}DTO dto) {
+            ${entity} obj = selectById(id);
+            mapper.map(dto, obj);
+            obj.setDeleteFlag(SuperEntity.DEL_FLAG_NORMAL);
+            updateById(obj);
+            return obj;
+        }
+
+        @Override
+        public void delete(Long id) {
+            deleteById(id);
+        }
+
+        private ${entity}VO convertToVO(${entity} obj) {
+            ${entity}VO vo = mapper.map(obj, ${entity}VO.class);
+            return vo;
+        }
+
+}
+#end
